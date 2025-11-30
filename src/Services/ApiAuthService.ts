@@ -1,6 +1,7 @@
 import {
   AI_SERVICE_ANTHROPIC,
   AI_SERVICE_GEMINI,
+  AI_SERVICE_LITELLM,
   AI_SERVICE_LMSTUDIO,
   AI_SERVICE_OLLAMA,
   AI_SERVICE_OPENAI,
@@ -49,6 +50,8 @@ export class ApiAuthService {
         return ""; // Ollama doesn't use an API key
       case AI_SERVICE_LMSTUDIO:
         return ""; // LM Studio doesn't use an API key
+      case AI_SERVICE_LITELLM:
+        return settings.litellmApiKey || ""; // LiteLLM API key is optional
       default:
         return "";
     }
@@ -61,8 +64,8 @@ export class ApiAuthService {
    * @throws Error if the API key is invalid
    */
   validateApiKey(apiKey: string | undefined, serviceName: string): void {
-    // Skip validation for Ollama and LM Studio as they don't require an API key
-    if (serviceName === AI_SERVICE_OLLAMA || serviceName === AI_SERVICE_LMSTUDIO) {
+    // Skip validation for Ollama, LM Studio, and LiteLLM as they don't require an API key
+    if (serviceName === AI_SERVICE_OLLAMA || serviceName === AI_SERVICE_LMSTUDIO || serviceName === AI_SERVICE_LITELLM) {
       return;
     }
 
@@ -105,6 +108,12 @@ export class ApiAuthService {
         break;
       case AI_SERVICE_LMSTUDIO:
         // LM Studio doesn't require authentication headers
+        break;
+      case AI_SERVICE_LITELLM:
+        // LiteLLM uses Bearer token if API key is provided
+        if (apiKey) {
+          headers["Authorization"] = `Bearer ${apiKey}`;
+        }
         break;
     }
 

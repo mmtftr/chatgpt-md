@@ -10,6 +10,7 @@ import { DEFAULT_OLLAMA_CONFIG } from "src/Services/OllamaService";
 import { DEFAULT_LMSTUDIO_CONFIG } from "src/Services/LmStudioService";
 import { DEFAULT_ANTHROPIC_CONFIG } from "src/Services/AnthropicService";
 import { DEFAULT_GEMINI_CONFIG } from "src/Services/GeminiService";
+import { DEFAULT_LITELLM_CONFIG } from "src/Services/LiteLLMService";
 
 /**
  * Generate default chat front matter using service provider defaults
@@ -38,6 +39,8 @@ export interface ApiKeySettings {
   anthropicApiKey: string;
   /** API Key for Gemini */
   geminiApiKey: string;
+  /** API Key for LiteLLM (optional) */
+  litellmApiKey: string;
 }
 
 /**
@@ -138,6 +141,16 @@ export interface LmStudioFrontmatterSettings {
 }
 
 /**
+ * Provider-specific frontmatter settings for LiteLLM
+ */
+export interface LiteLLMFrontmatterSettings {
+  litellmDefaultTemperature: number;
+  litellmDefaultTopP: number;
+  litellmDefaultPresencePenalty: number;
+  litellmDefaultFrequencyPenalty: number;
+}
+
+/**
  * Chat template settings
  */
 export interface TemplateSettings {
@@ -161,6 +174,8 @@ export interface ServiceUrlSettings {
   anthropicUrl: string;
   /** URL for Gemini API */
   geminiUrl: string;
+  /** URL for LiteLLM API */
+  litellmUrl: string;
 }
 
 /**
@@ -178,7 +193,8 @@ export interface ChatGPT_MDSettings
     GeminiFrontmatterSettings,
     OpenRouterFrontmatterSettings,
     OllamaFrontmatterSettings,
-    LmStudioFrontmatterSettings {}
+    LmStudioFrontmatterSettings,
+    LiteLLMFrontmatterSettings {}
 
 /**
  * Default settings
@@ -189,6 +205,7 @@ export const DEFAULT_SETTINGS: ChatGPT_MDSettings = {
   openrouterApiKey: "",
   anthropicApiKey: "",
   geminiApiKey: "",
+  litellmApiKey: "",
 
   // Service URLs
   openaiUrl: DEFAULT_OPENAI_CONFIG.url,
@@ -197,6 +214,7 @@ export const DEFAULT_SETTINGS: ChatGPT_MDSettings = {
   lmstudioUrl: DEFAULT_LMSTUDIO_CONFIG.url,
   anthropicUrl: DEFAULT_ANTHROPIC_CONFIG.url,
   geminiUrl: DEFAULT_GEMINI_CONFIG.url,
+  litellmUrl: DEFAULT_LITELLM_CONFIG.url,
 
   // Folders
   chatFolder: "ChatGPT_MD/chats",
@@ -252,4 +270,10 @@ export const DEFAULT_SETTINGS: ChatGPT_MDSettings = {
   lmstudioDefaultTopP: DEFAULT_LMSTUDIO_CONFIG.top_p,
   lmstudioDefaultPresencePenalty: DEFAULT_LMSTUDIO_CONFIG.presence_penalty,
   lmstudioDefaultFrequencyPenalty: DEFAULT_LMSTUDIO_CONFIG.frequency_penalty,
+
+  // LiteLLM Defaults (no default model - user must configure)
+  litellmDefaultTemperature: DEFAULT_LITELLM_CONFIG.temperature,
+  litellmDefaultTopP: DEFAULT_LITELLM_CONFIG.top_p,
+  litellmDefaultPresencePenalty: DEFAULT_LITELLM_CONFIG.presence_penalty,
+  litellmDefaultFrequencyPenalty: DEFAULT_LITELLM_CONFIG.frequency_penalty,
 };

@@ -4,6 +4,7 @@ export const AI_SERVICE_OPENROUTER = "openrouter";
 export const AI_SERVICE_LMSTUDIO = "lmstudio";
 export const AI_SERVICE_ANTHROPIC = "anthropic";
 export const AI_SERVICE_GEMINI = "gemini";
+export const AI_SERVICE_LITELLM = "litellm";
 
 // API endpoints for each service
 export const API_ENDPOINTS = {
@@ -13,6 +14,7 @@ export const API_ENDPOINTS = {
   [AI_SERVICE_LMSTUDIO]: "/v1/chat/completions",
   [AI_SERVICE_ANTHROPIC]: "/v1/messages",
   [AI_SERVICE_GEMINI]: "/v1beta/models/{model}:generateContent",
+  [AI_SERVICE_LITELLM]: "/v1/chat/completions",
 };
 
 export const ADD_COMMENT_BLOCK_COMMAND_ID = "add-comment-block";

@@ -7,6 +7,7 @@ import { EditorService } from "./EditorService";
 import {
   AI_SERVICE_ANTHROPIC,
   AI_SERVICE_GEMINI,
+  AI_SERVICE_LITELLM,
   AI_SERVICE_LMSTUDIO,
   AI_SERVICE_OLLAMA,
   AI_SERVICE_OPENAI,
@@ -569,6 +570,9 @@ export const aiProviderFromUrl = (url?: string, model?: string): string | undefi
   if (model?.startsWith("lmstudio@")) {
     return AI_SERVICE_LMSTUDIO;
   }
+  if (model?.startsWith("litellm@")) {
+    return AI_SERVICE_LITELLM;
+  }
   if (model?.startsWith("anthropic@")) {
     return AI_SERVICE_ANTHROPIC;
   }
@@ -608,6 +612,7 @@ export const aiProviderFromUrl = (url?: string, model?: string): string | undefi
   const GEMINI_URL_PATTERN = "generativelanguage.googleapis.com";
   const LOCAL_URL_PATTERNS = ["localhost", "127.0.0.1"];
   const LMSTUDIO_URL_PATTERN = "1234"; // LM Studio default port
+  const LITELLM_URL_PATTERN = "4000"; // LiteLLM default port
 
   if (url?.includes(OPENROUTER_URL_PATTERN)) {
     return AI_SERVICE_OPENROUTER;
@@ -620,6 +625,9 @@ export const aiProviderFromUrl = (url?: string, model?: string): string | undefi
   }
   if (url?.includes(LMSTUDIO_URL_PATTERN)) {
     return AI_SERVICE_LMSTUDIO;
+  }
+  if (url?.includes(LITELLM_URL_PATTERN)) {
+    return AI_SERVICE_LITELLM;
   }
   if (LOCAL_URL_PATTERNS.some((pattern) => url?.includes(pattern))) {
     return AI_SERVICE_OLLAMA;
