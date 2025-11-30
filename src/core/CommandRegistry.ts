@@ -9,11 +9,13 @@ import { DEFAULT_OPENROUTER_CONFIG, fetchAvailableOpenRouterModels } from "src/S
 import { DEFAULT_LMSTUDIO_CONFIG, fetchAvailableLmStudioModels } from "src/Services/LmStudioService";
 import { DEFAULT_ANTHROPIC_CONFIG, fetchAvailableAnthropicModels } from "src/Services/AnthropicService";
 import { DEFAULT_GEMINI_CONFIG, fetchAvailableGeminiModels } from "src/Services/GeminiService";
+import { DEFAULT_LITELLM_CONFIG, fetchAvailableLiteLLMModels } from "src/Services/LiteLLMService";
 import {
   ADD_COMMENT_BLOCK_COMMAND_ID,
   ADD_HR_COMMAND_ID,
   AI_SERVICE_ANTHROPIC,
   AI_SERVICE_GEMINI,
+  AI_SERVICE_LITELLM,
   AI_SERVICE_LMSTUDIO,
   AI_SERVICE_OLLAMA,
   AI_SERVICE_OPENAI,
@@ -211,6 +213,7 @@ export class CommandRegistry {
               [AI_SERVICE_LMSTUDIO]: frontmatter.lmstudioUrl || settings.lmstudioUrl || DEFAULT_LMSTUDIO_CONFIG.url,
               [AI_SERVICE_ANTHROPIC]: frontmatter.anthropicUrl || settings.anthropicUrl || DEFAULT_ANTHROPIC_CONFIG.url,
               [AI_SERVICE_GEMINI]: frontmatter.geminiUrl || settings.geminiUrl || DEFAULT_GEMINI_CONFIG.url,
+              [AI_SERVICE_LITELLM]: frontmatter.litellmUrl || settings.litellmUrl || DEFAULT_LITELLM_CONFIG.url,
             };
 
             const freshModels = await this.fetchAvailableModels(currentUrls, openAiKey, openRouterKey);
@@ -419,6 +422,7 @@ export class CommandRegistry {
       lmstudio: frontmatter.lmstudioUrl || DEFAULT_LMSTUDIO_CONFIG.url,
       anthropic: frontmatter.anthropicUrl || DEFAULT_ANTHROPIC_CONFIG.url,
       gemini: frontmatter.geminiUrl || DEFAULT_GEMINI_CONFIG.url,
+      litellm: frontmatter.litellmUrl || DEFAULT_LITELLM_CONFIG.url,
     };
   }
 
@@ -439,6 +443,7 @@ export class CommandRegistry {
         [AI_SERVICE_LMSTUDIO]: settings.lmstudioUrl || DEFAULT_LMSTUDIO_CONFIG.url,
         [AI_SERVICE_ANTHROPIC]: settings.anthropicUrl || DEFAULT_ANTHROPIC_CONFIG.url,
         [AI_SERVICE_GEMINI]: settings.geminiUrl || DEFAULT_GEMINI_CONFIG.url,
+        [AI_SERVICE_LITELLM]: settings.litellmUrl || DEFAULT_LITELLM_CONFIG.url,
       };
 
       this.availableModels = await this.fetchAvailableModels(defaultUrls, openAiKey, openRouterKey);
@@ -471,6 +476,12 @@ export class CommandRegistry {
 
       // Add LM Studio promise (always fetched, no API key required)
       promises.push(withTimeout(fetchAvailableLmStudioModels(urls[AI_SERVICE_LMSTUDIO]), FETCH_MODELS_TIMEOUT_MS, []));
+
+      // Add LiteLLM promise (always fetched, API key is optional)
+      const litellmApiKey = this.apiAuthService.getApiKey(this.settingsService.getSettings(), AI_SERVICE_LITELLM);
+      promises.push(
+        withTimeout(fetchAvailableLiteLLMModels(urls[AI_SERVICE_LITELLM], litellmApiKey), FETCH_MODELS_TIMEOUT_MS, [])
+      );
 
       // Conditionally add OpenAI promise
       if (isValidApiKey(apiKey)) {

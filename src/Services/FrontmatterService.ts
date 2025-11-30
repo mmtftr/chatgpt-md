@@ -7,10 +7,12 @@ import { DEFAULT_OPENROUTER_CONFIG } from "src/Services/OpenRouterService";
 import { DEFAULT_LMSTUDIO_CONFIG } from "src/Services/LmStudioService";
 import { DEFAULT_ANTHROPIC_CONFIG } from "src/Services/AnthropicService";
 import { DEFAULT_GEMINI_CONFIG } from "src/Services/GeminiService";
+import { DEFAULT_LITELLM_CONFIG } from "src/Services/LiteLLMService";
 import { aiProviderFromKeys, aiProviderFromUrl } from "src/Services/AiService";
 import {
   AI_SERVICE_ANTHROPIC,
   AI_SERVICE_GEMINI,
+  AI_SERVICE_LITELLM,
   AI_SERVICE_LMSTUDIO,
   AI_SERVICE_OLLAMA,
   AI_SERVICE_OPENAI,
@@ -65,6 +67,7 @@ export class FrontmatterService {
       [AI_SERVICE_LMSTUDIO]: DEFAULT_LMSTUDIO_CONFIG,
       [AI_SERVICE_ANTHROPIC]: DEFAULT_ANTHROPIC_CONFIG,
       [AI_SERVICE_GEMINI]: DEFAULT_GEMINI_CONFIG,
+      [AI_SERVICE_LITELLM]: DEFAULT_LITELLM_CONFIG,
     };
     const defaultConfig = serviceDefaults[aiService] || DEFAULT_OPENAI_CONFIG;
 
@@ -214,6 +217,17 @@ export class FrontmatterService {
           temperature: settings.geminiDefaultTemperature,
           top_p: settings.geminiDefaultTopP,
           max_tokens: settings.geminiDefaultMaxTokens,
+        };
+        break;
+      case AI_SERVICE_LITELLM:
+        frontmatterObj = {
+          ...frontmatterObj,
+          // model: User must configure model manually
+          url: settings.litellmUrl,
+          temperature: settings.litellmDefaultTemperature,
+          top_p: settings.litellmDefaultTopP,
+          presence_penalty: settings.litellmDefaultPresencePenalty,
+          frequency_penalty: settings.litellmDefaultFrequencyPenalty,
         };
         break;
     }

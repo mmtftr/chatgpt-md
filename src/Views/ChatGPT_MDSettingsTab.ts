@@ -7,6 +7,7 @@ import { DEFAULT_OLLAMA_CONFIG } from "src/Services/OllamaService";
 import { DEFAULT_LMSTUDIO_CONFIG } from "src/Services/LmStudioService";
 import { DEFAULT_ANTHROPIC_CONFIG } from "src/Services/AnthropicService";
 import { DEFAULT_GEMINI_CONFIG } from "src/Services/GeminiService";
+import { DEFAULT_LITELLM_CONFIG } from "src/Services/LiteLLMService";
 
 interface SettingDefinition {
   id: keyof ChatGPT_MDSettings;
@@ -299,6 +300,32 @@ export class ChatGPT_MDSettingsTab extends PluginSettingTab {
         type: "text",
         placeholder: "0.7",
         group: "LM Studio Defaults",
+      },
+
+      // LiteLLM Defaults
+      {
+        id: "litellmUrl",
+        name: "LiteLLM API URL",
+        description: `URL for LiteLLM proxy server\nDefault URL: ${DEFAULT_LITELLM_CONFIG.url}`,
+        type: "text",
+        placeholder: DEFAULT_LITELLM_CONFIG.url,
+        group: "LiteLLM Defaults",
+      },
+      {
+        id: "litellmApiKey",
+        name: "LiteLLM API Key (Optional)",
+        description: "API Key for authenticated LiteLLM servers (leave empty if not required)",
+        type: "text",
+        placeholder: "your LiteLLM API Key (optional)",
+        group: "LiteLLM Defaults",
+      },
+      {
+        id: "litellmDefaultTemperature",
+        name: "Default LiteLLM Temperature",
+        description: "Default temperature for LiteLLM chats (0.0 to 2.0)",
+        type: "text",
+        placeholder: "0.7",
+        group: "LiteLLM Defaults",
       },
 
       // Folders
